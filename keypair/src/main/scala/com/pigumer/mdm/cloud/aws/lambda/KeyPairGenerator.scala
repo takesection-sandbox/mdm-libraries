@@ -10,7 +10,7 @@ import spray.json._
 
 class KeyPairGenerator extends RequestStreamHandler {
 
-  lazy val bucketRegion = sys.env("BUCKET_REGION")
+  lazy val bucketRegion = sys.env.getOrElse("BUCKET_REGION", "AWS_REGION")
   lazy val bucketName = sys.env("BUCKET_NAME")
   lazy val algorithm = sys.env.getOrElse("ALGORITHM", "RSA")
   lazy val keySize = sys.env.getOrElse("KEY_SIZE", "2048").toInt
