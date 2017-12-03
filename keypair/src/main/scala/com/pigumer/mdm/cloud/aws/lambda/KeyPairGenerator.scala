@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.pigumer.mdm.keypair.KeyPair
 import spray.json._
 
+import scala.util.Try
+
 class KeyPairGenerator extends RequestStreamHandler {
 
   lazy val bucketRegion = sys.env.getOrElse("BUCKET_REGION", "AWS_REGION")
@@ -18,13 +20,15 @@ class KeyPairGenerator extends RequestStreamHandler {
   lazy val s3 = AmazonS3ClientBuilder.standard.withRegion(bucketRegion).build
 
   @throws(classOf[java.io.IOException])
-  override def handleRequest(input: InputStream, output: OutputStream, context: Context) = {
-    import JsonProtocol._
-
-    val request = JsonParser(new String(Stream.continually(input.read).takeWhile(_ != -1).map(_.toByte).toArray,
-      StandardCharsets.UTF_8)).convertTo[KeyPairRequestJson]
-    val keyPair = new KeyPair(algorithm, keySize)
-    s3.putObject(bucketName, request.privateKeyFile, keyPair.privateKeyToPEMString)
-    s3.putObject(bucketName, request.publicKeyFile, keyPair.publicKeyToPEMString)
-  }
+  override def handleRequest(input: InputStream, output: OutputStream, context: Context) =
+  for {
+    request ← Try {
+      import JsonProtocol._
+      JsonParser(new String(Stream.continually(input.read).takeWhile(_ != -1).map(_.toByte).toArray,
+        StandardCharsets.UTF_8)).convertTo[KeyPairRequestJson]
+    }
+    keyPair ← Try(new KeyPair(algorithm, keySize))
+    _ ← Try(s3.putObject(bucketName, request.privateKeyFile, keyPair.privateKeyToPEMString))
+    _ ← Try(s3.putObject(bucketName, request.publicKeyFile, keyPair.publicKeyToPEMString))
+  } yield ()
 }
