@@ -1,7 +1,7 @@
 package com.pigumer.mdm.security
 
 import java.io.StringWriter
-import java.security.{KeyPairGenerator, KeyPair => JSKeyPair}
+import java.security.{KeyPairGenerator, KeyPair ⇒ JSKeyPair}
 
 import org.bouncycastle.openssl.jcajce.JcaMiscPEMGenerator
 import org.bouncycastle.util.io.pem.PemWriter
