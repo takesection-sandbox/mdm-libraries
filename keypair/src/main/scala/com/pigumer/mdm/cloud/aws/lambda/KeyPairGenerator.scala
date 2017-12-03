@@ -27,7 +27,7 @@ class KeyPairGenerator extends RequestStreamHandler {
       JsonParser(new String(Stream.continually(input.read).takeWhile(_ != -1).map(_.toByte).toArray,
         StandardCharsets.UTF_8)).convertTo[KeyPairRequestJson]
     }
-    keyPair ← Try(new KeyPair(algorithm, keySize))
+    keyPair ← Try(KeyPair.genKeyPair(algorithm, keySize))
     _ ← Try(s3.putObject(bucketName, request.privateKeyFile, keyPair.privateKeyToPEMString))
     _ ← Try(s3.putObject(bucketName, request.publicKeyFile, keyPair.publicKeyToPEMString))
   } yield ()
