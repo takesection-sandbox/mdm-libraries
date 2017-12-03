@@ -1,4 +1,4 @@
-package com.pigumer.mdm.keypair
+package com.pigumer.mdm.security
 
 import java.io.StringWriter
 import java.security.{KeyPair ⇒ JSKeyPair, KeyPairGenerator}

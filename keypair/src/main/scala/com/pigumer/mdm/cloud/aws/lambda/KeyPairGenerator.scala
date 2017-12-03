@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
-import com.pigumer.mdm.keypair.KeyPair
+import com.pigumer.mdm.security.KeyPair
 import spray.json._
 
 import scala.util.Try
