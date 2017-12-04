@@ -14,4 +14,7 @@ object Dependencies {
   val awsJavaSdkS3 = "com.amazonaws" % "aws-java-sdk-s3" % AwsSDKVersion
 
   val sprayJson = "io.spray" %% "spray-json" % "1.3.3"
+
+  // https://mvnrepository.com/artifact/org.scala-lang.modules/scala-xml
+  val scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.0.6"
 }

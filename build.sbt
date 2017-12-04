@@ -11,7 +11,8 @@ lazy val security = (project in file("security"))
   .settings(
     name := "security",
     libraryDependencies ++= Seq(
-      bcpkix
+      bcpkix,
+      scalaXml
     )
   )
 
