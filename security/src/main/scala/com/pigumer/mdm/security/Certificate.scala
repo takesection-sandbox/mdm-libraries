@@ -5,7 +5,7 @@ import java.util.Date
 
 import org.bouncycastle.asn1.oiw.OIWObjectIdentifiers
 import org.bouncycastle.asn1.x500.X500Name
-import org.bouncycastle.asn1.x509.AlgorithmIdentifier
+import org.bouncycastle.asn1.x509.{AlgorithmIdentifier, SubjectPublicKeyInfo}
 import org.bouncycastle.cert.X509v3CertificateBuilder
 import org.bouncycastle.crypto.util.{PrivateKeyFactory, PublicKeyFactory, SubjectPublicKeyInfoFactory}
 import org.bouncycastle.openssl.jcajce.JcaMiscPEMGenerator
@@ -25,7 +25,7 @@ class Certificate(issuer: X500Name,
       notBefore,
       notAfter,
       subject,
-      SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(PublicKeyFactory.createKey(keyPair.publicKey.getEncoded))
+      SubjectPublicKeyInfo.getInstance(keyPair.publicKey.getEncoded)
     )
     val sigAlgId = new AlgorithmIdentifier(OIWObjectIdentifiers.sha1WithRSA)
     val digAlgId = new AlgorithmIdentifier(OIWObjectIdentifiers.idSHA1)
