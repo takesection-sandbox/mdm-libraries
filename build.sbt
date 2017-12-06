@@ -12,7 +12,10 @@ lazy val security = (project in file("security"))
     name := "security",
     libraryDependencies ++= Seq(
       bcpkix,
-      scalaXml
+      bcmail,
+      javaxmail,
+      scalaXml,
+      specs2
     )
   )
 
