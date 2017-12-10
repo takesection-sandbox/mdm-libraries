@@ -1,40 +1,22 @@
 package com.pigumer.mdm.security
 
-import java.io.StringWriter
-import java.security.{KeyPairGenerator, KeyPair ⇒ JSKeyPair}
+import java.io.{Reader, StringWriter}
+import java.security.{KeyPairGenerator, PublicKey ⇒ JSPublicKey, KeyPair ⇒ JSKeyPair, PrivateKey ⇒ JSPrivateKey}
 
-import org.bouncycastle.openssl.jcajce.JcaMiscPEMGenerator
+import org.bouncycastle.openssl.{PEMKeyPair, PEMParser}
+import org.bouncycastle.openssl.jcajce.{JcaMiscPEMGenerator, JcaPEMKeyConverter}
 import org.bouncycastle.util.io.pem.PemWriter
 
-class KeyPair(keyPair: JSKeyPair) {
+trait PrivateKey {
 
-  val publicKey = keyPair.getPublic
-  val privateKey = keyPair.getPrivate
+  val privateKey: JSPrivateKey
 
   def privateKeyToPEMString = {
     val writer = new StringWriter
     try {
       val pemWriter = new PemWriter(writer)
       try {
-        val pemObject = new JcaMiscPEMGenerator(keyPair.getPrivate)
-        pemWriter.writeObject(pemObject)
-      }
-      finally {
-        pemWriter.close
-      }
-      writer.toString
-    }
-    finally {
-      writer.close
-    }
-  }
-
-  def publicKeyToPEMString = {
-    val writer = new StringWriter
-    try {
-      val pemWriter = new PemWriter(writer)
-      try {
-        val pemObject = new JcaMiscPEMGenerator(keyPair.getPublic)
+        val pemObject = new JcaMiscPEMGenerator(privateKey)
         pemWriter.writeObject(pemObject)
       }
       finally {
@@ -48,13 +30,57 @@ class KeyPair(keyPair: JSKeyPair) {
   }
 }
 
-object KeyPair {
-  def genKeyPair(algorithm: String = "RSA", keySize: Int = 2048): KeyPair =
-    new KeyPair(
-      {
-        val generator = KeyPairGenerator.getInstance(algorithm)
-        generator.initialize(keySize)
-        generator.genKeyPair()
+trait PublicKey {
+
+  val publicKey: JSPublicKey
+
+  def publicKeyToPEMString = {
+    val writer = new StringWriter
+    try {
+      val pemWriter = new PemWriter(writer)
+      try {
+        val pemObject = new JcaMiscPEMGenerator(publicKey)
+        pemWriter.writeObject(pemObject)
       }
-    )
+      finally {
+        pemWriter.close
+      }
+      writer.toString
+    }
+    finally {
+      writer.close
+    }
+  }
+}
+
+trait KeyPair extends PublicKey with PrivateKey
+
+object KeyPair {
+
+  def apply(keyPair: JSKeyPair): KeyPair =
+    new KeyPair {
+      override val publicKey = keyPair.getPublic
+      override val privateKey = keyPair.getPrivate
+    }
+
+  def genKeyPair(algorithm: String = "RSA", keySize: Int = 2048): KeyPair = {
+    val generator = KeyPairGenerator.getInstance(algorithm)
+    generator.initialize(keySize)
+    val keyPair = generator.genKeyPair()
+    new KeyPair {
+      override val publicKey = keyPair.getPublic
+      override val privateKey = keyPair.getPrivate
+    }
+  }
+}
+
+object PrivateKey {
+
+  def parse(reader: Reader): PrivateKey = {
+    val parser = new PEMParser(reader)
+    val obj = parser.readObject.asInstanceOf[PEMKeyPair]
+    new PrivateKey {
+      override val privateKey = new JcaPEMKeyConverter().getPrivateKey(obj.getPrivateKeyInfo)
+    }
+  }
 }
