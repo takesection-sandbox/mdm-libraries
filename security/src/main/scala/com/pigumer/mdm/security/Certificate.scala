@@ -7,7 +7,7 @@ import org.bouncycastle.asn1.oiw.OIWObjectIdentifiers
 import org.bouncycastle.asn1.x500.X500Name
 import org.bouncycastle.asn1.x509.{AlgorithmIdentifier, SubjectPublicKeyInfo}
 import org.bouncycastle.cert.X509v3CertificateBuilder
-import org.bouncycastle.crypto.util.{PrivateKeyFactory, PublicKeyFactory, SubjectPublicKeyInfoFactory}
+import org.bouncycastle.crypto.util.PrivateKeyFactory
 import org.bouncycastle.openssl.jcajce.JcaMiscPEMGenerator
 import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder
 import org.bouncycastle.util.io.pem.PemWriter
