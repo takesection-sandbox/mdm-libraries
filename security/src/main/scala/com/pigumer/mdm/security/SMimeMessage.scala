@@ -9,7 +9,7 @@ import org.bouncycastle.cms.jcajce.{JceKeyTransEnvelopedRecipient, JceKeyTransRe
 import org.bouncycastle.mail.smime.{SMIMEEnveloped, SMIMEUtil}
 
 trait SMimeMessage {
-  def decrypt(inputStream: InputStream, certificate: X509Certificate, key: PrivateKey): MimeBodyPart = {
+  def decrypt(inputStream: InputStream, certificate: SelfSignedCertificate, key: PrivateKey): MimeBodyPart = {
     val session = Session.getDefaultInstance(System.getProperties, null)
     val message = new MimeMessage(session, inputStream)
     val enveloped = new SMIMEEnveloped(message)

@@ -13,7 +13,7 @@ import org.bouncycastle.openssl.jcajce.JcaMiscPEMGenerator
 import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder
 import org.bouncycastle.util.io.pem.PemWriter
 
-trait X509Certificate {
+trait SelfSignedCertificate {
   val x509Certificate: X509CertificateHolder
   def toPEMString: String = {
     val writer = new StringWriter
@@ -34,13 +34,13 @@ trait X509Certificate {
   }
 }
 
-object X509Certificate {
-  def build(issuer: X500Name,
-            serial: BigInt,
+object SelfSignedCertificate {
+  def build(serial: BigInt,
             notBefore: Date,
             notAfter: Date,
             subject: X500Name,
-            keyPair: KeyPair): X509Certificate = {
+            keyPair: KeyPair): SelfSignedCertificate = {
+    val issuer = subject
     val builder = new X509v3CertificateBuilder(issuer,
       serial.bigInteger,
       notBefore,
@@ -52,14 +52,14 @@ object X509Certificate {
     val digAlgId = new AlgorithmIdentifier(OIWObjectIdentifiers.idSHA1)
     val privateKeyParam = PrivateKeyFactory.createKey(keyPair.privateKey.getEncoded)
     val contentSigner = new BcRSAContentSignerBuilder(sigAlgId, digAlgId).build(privateKeyParam)
-    new X509Certificate {
+    new SelfSignedCertificate {
       override val x509Certificate = builder.build(contentSigner)
     }
   }
-  def parse(reader: Reader): X509Certificate = {
+  def parse(reader: Reader): SelfSignedCertificate = {
     val parser = new PEMParser(reader)
     val obj = parser.readObject
-    new X509Certificate {
+    new SelfSignedCertificate {
       override val x509Certificate = obj.asInstanceOf[X509CertificateHolder]
     }
   }
