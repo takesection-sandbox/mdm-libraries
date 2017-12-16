@@ -31,26 +31,7 @@ trait PrivateKey {
 }
 
 trait PublicKey {
-
   val publicKey: JSPublicKey
-
-  def publicKeyToPEMString = {
-    val writer = new StringWriter
-    try {
-      val pemWriter = new PemWriter(writer)
-      try {
-        val pemObject = new JcaMiscPEMGenerator(publicKey)
-        pemWriter.writeObject(pemObject)
-      }
-      finally {
-        pemWriter.close
-      }
-      writer.toString
-    }
-    finally {
-      writer.close
-    }
-  }
 }
 
 trait KeyPair extends PublicKey with PrivateKey

@@ -8,8 +8,8 @@ import org.bouncycastle.asn1.x500.X500Name
 import org.bouncycastle.asn1.x509.{AlgorithmIdentifier, SubjectPublicKeyInfo}
 import org.bouncycastle.cert.{X509CertificateHolder, X509v3CertificateBuilder}
 import org.bouncycastle.crypto.util.PrivateKeyFactory
-import org.bouncycastle.openssl.{PEMKeyPair, PEMParser}
-import org.bouncycastle.openssl.jcajce.{JcaMiscPEMGenerator, JcaPEMKeyConverter}
+import org.bouncycastle.openssl.PEMParser
+import org.bouncycastle.openssl.jcajce.JcaMiscPEMGenerator
 import org.bouncycastle.operator.bc.BcRSAContentSignerBuilder
 import org.bouncycastle.util.io.pem.PemWriter
 
