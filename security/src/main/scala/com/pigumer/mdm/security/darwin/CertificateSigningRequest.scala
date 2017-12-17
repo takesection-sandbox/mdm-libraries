@@ -1,6 +1,6 @@
 package com.pigumer.mdm.security.darwin
 
-class Plist {
+class CertificateSigningRequest {
   val csr = ""
   val chain = ""
   val signature = ""
