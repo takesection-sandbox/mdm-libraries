@@ -11,6 +11,7 @@ lazy val security = (project in file("security"))
   .settings(
     name := "security",
     libraryDependencies ++= Seq(
+      sprayJson,
       bcpkix,
       bcmail,
       javaxmail,
