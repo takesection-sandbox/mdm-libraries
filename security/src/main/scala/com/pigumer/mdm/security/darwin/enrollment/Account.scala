@@ -2,10 +2,8 @@ package com.pigumer.mdm.security.darwin.enrollment
 
 import spray.json._
 
-case class AccountUrlLimit(default: Integer, maximum: Integer)
-
+case class AccountUrlLimit(default: Int, maximum: Int)
 case class AccountUrl(uri: String, httpMethod: String, limit: Option[AccountUrlLimit])
-
 case class Account(serverName: String,
                    serverUuid: String,
                    adminId: String,
