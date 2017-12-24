@@ -23,4 +23,7 @@ object Dependencies {
 
   // https://mvnrepository.com/artifact/org.scala-lang.modules/scala-xml
   val scalaXml = "org.scala-lang.modules" %% "scala-xml" % "1.0.6"
+
+  // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+  val httpClient = "org.apache.httpcomponents" % "httpclient" % "4.5.4"
 }

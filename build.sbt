@@ -16,7 +16,8 @@ lazy val security = (project in file("security"))
       bcmail,
       javaxmail,
       scalaXml,
-      specs2
+      specs2,
+      httpClient
     )
   )
 
